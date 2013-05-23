@@ -30,6 +30,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
    
 <!--  
+  2012-01-11 ulbricht@gfz-potsdam.de 
+  Added support for metadataPrefix=iso19139
+
+  2012-03-21 ulbricht@gfz-potsdam.de 
+  Added support for metadataPrefix=dif
+
   2011-06-16 paluchm
   Added support for contentListSize and cursor values in resumptionToken.
   
@@ -522,6 +528,8 @@ p.intro {
       <xsl:text> </xsl:text><a class="link" href="?verb=GetRecord&amp;metadataPrefix=oai_dc&amp;identifier={oai:identifier}">oai_dc</a>
       <xsl:text> </xsl:text><a class="link" href="?verb=GetRecord&amp;metadataPrefix=oai_datacite&amp;identifier={oai:identifier}">oai_datacite</a>
       <xsl:text> </xsl:text><a class="link" href="?verb=GetRecord&amp;metadataPrefix=datacite&amp;identifier={oai:identifier}">datacite</a>
+      <xsl:text> </xsl:text><a class="link" href="?verb=GetRecord&amp;metadataPrefix=dif&amp;identifier={oai:identifier}">dif</a>
+      <xsl:text> </xsl:text><a class="link" href="?verb=GetRecord&amp;metadataPrefix=iso19139&amp;identifier={oai:identifier}">iso19139</a>
       <xsl:text> </xsl:text><a class="link" href="?verb=ListMetadataFormats&amp;identifier={oai:identifier}">formats</a>
     </td></tr>
     <tr><td class="key">Datestamp</td>
@@ -607,6 +615,12 @@ p.intro {
   	</xsl:when>
   	<xsl:when test="name()='resource'">
   		<h3>DataCite Metadata (datacite)</h3>
+  	</xsl:when>
+  	<xsl:when test="name()='DIF'">
+  		<h3>NASA DIF Metadata</h3>
+  	</xsl:when>
+  	<xsl:when test="name()='gmd:MD_Metadata'">
+  		<h3>ISO19139 Metadata</h3>
   	</xsl:when>
   	<xsl:otherwise>
 		<h3>Unknown Metadata Format</h3>  	

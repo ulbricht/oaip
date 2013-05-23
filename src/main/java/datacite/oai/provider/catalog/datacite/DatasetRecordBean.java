@@ -30,6 +30,8 @@ public class DatasetRecordBean implements Serializable{
     
     private String id;
     private String metadata;
+    private String dif;
+	 private String iso;
     private Date updateDate;
     
     private String symbol;
@@ -56,6 +58,23 @@ public class DatasetRecordBean implements Serializable{
         this.schemaVersion = schemaVersion;
 
         setMetadata(metadata);
+
+	dif=null;
+	iso=null;
+    }
+
+    public void setDif(String dif) {
+        this.dif = dif.replaceAll("(<!--.*-->)","").replaceAll("(<\\?xml.*\\?>)","");
+    }
+    public String getDif() {
+        return this.dif;
+    }
+
+    public void setIso(String iso) {
+        this.iso = iso.replaceAll("(<!--.*-->)","").replaceAll("(<\\?xml.*\\?>)","");
+    }
+    public String getIso() {
+        return this.iso;
     }
 
     public String getId() {

@@ -12,6 +12,10 @@
 
     <xsl:template match="identifier">
         <dc:identifier>
+            <xsl:text>http://dx.doi.org/</xsl:text>
+            <xsl:value-of select="."/>
+        </dc:identifier>
+        <dc:identifier>
             <xsl:choose>
                 <xsl:when test="string-length(@identifierType) &gt; 0">
                     <xsl:value-of select="lower-case(@identifierType)"/>
@@ -198,14 +202,14 @@
 
     <xsl:template match="descriptions">
         <xsl:for-each select="description">
-            <xsl:if test="normalize-space(@descriptionType)">
-                <xsl:element name="dc:description">
-                    <xsl:value-of select="@descriptionType"/>
-                </xsl:element>
-            </xsl:if>
             <xsl:if test="normalize-space(.)">
                 <xsl:element name="dc:description">
                     <xsl:value-of select="."/>
+                </xsl:element>
+            </xsl:if> 
+            <xsl:if test="normalize-space(@descriptionType)">
+                <xsl:element name="dc:description">
+                    <xsl:value-of select="@descriptionType"/>
                 </xsl:element>
             </xsl:if>
         </xsl:for-each>

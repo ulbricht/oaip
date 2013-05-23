@@ -5,6 +5,7 @@
 	<Parameter name="stylesheet.kernel2.0_to_oaidc" value="/xsl/kernel2.0_to_oaidc.xsl" />
 	<Parameter name="stylesheet.kernel2.1_to_oaidc" value="/xsl/kernel2.1_to_oaidc.xsl" />
 	<Parameter name="stylesheet.kernel2.2_to_oaidc" value="/xsl/kernel2.2_to_oaidc.xsl" />
+	<Parameter name="stylesheet.DIFtoISO" value="/xsl/DIF-ISO-3.0.xsl" />
 
 	<!-- file containing DB connection strings -->
 	<Parameter name="db.properties" value="/WEB-INF/classes/database.properties" />
@@ -24,18 +25,20 @@
 	<Parameter name="datacitemds.AbstractCatalog.secondsToLive" value="3600" />
 	<Parameter name="datacitemds.AbstractCatalog.granularity" value="YYYY-MM-DDThh:mm:ssZ" />
 	<Parameter name="datacitemds.DataciteOAICatalog.maxListSize" value="50" />
-	<Parameter name="datacitemds.DataciteOAIRecordFactory.repositoryIdentifier" value="oai.datacite.org" />
-	<Parameter name="datacitemds.Identify.repositoryName" value="DataCite MDS" />
-	<Parameter name="datacitemds.Identify.adminEmail" value="admin@datacite.org" />
+	<Parameter name="datacitemds.DataciteOAIRecordFactory.repositoryIdentifier" value="doidb.wdc-terra.org" />
+	<Parameter name="datacitemds.Identify.repositoryName" value="DOIDB Metadata Store" />
+	<Parameter name="datacitemds.Identify.adminEmail" value="ulbricht@gfz-potsdam.de" />
 	<Parameter name="datacitemds.Identify.earliestDatestamp" value="2011-01-01T00:00:00Z" />
 	<Parameter name="datacitemds.Identify.deletedRecord" value="no" />
-	<Parameter name="datacitemds.Identify.repositoryIdentifier" value="oai.datacite.org" />
-	<Parameter name="datacitemds.Identify.sampleIdentifier" value="oai:oai.datacite.org:12425" />
+	<Parameter name="datacitemds.Identify.repositoryIdentifier" value="doidb.wdc-terra.org" />
+	<Parameter name="datacitemds.Identify.sampleIdentifier" value="oai:doidb.wdc-terra.org:12425" />
 	<Parameter name="datacitemds.Crosswalks.oai_datacite" value="datacite.oai.provider.server.crosswalk.OaiDatacite" />
 	<Parameter name="datacitemds.Crosswalks.oai_dc" value="datacite.oai.provider.server.crosswalk.Datacite2Oai_dc" />
 	<Parameter name="datacitemds.Crosswalks.datacite" value="datacite.oai.provider.server.crosswalk.DataciteDirect" />
+	<Parameter name="datacitemds.Crosswalks.dif" value="datacite.oai.provider.server.crosswalk.NasaDif"/>
+	<Parameter name="datacitemds.Crosswalks.iso19139" value="datacite.oai.provider.server.crosswalk.Iso19139"/>
 	<Parameter name="datacitemds.OAIHandler.styleSheet" value="xsl/oaitohtml.xsl" />	
-  <Parameter name="datacitemds.OAIHandler.baseURL" value="http://oai.datacite.org/oai" />
+  <Parameter name="datacitemds.OAIHandler.baseURL" value="http://doidb.wdc-terra.org/oaip/oai" />
 
 	<!-- OAICat properties -->
 	<!-- *************************************************************************** -->

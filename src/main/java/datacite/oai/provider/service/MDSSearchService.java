@@ -55,8 +55,8 @@ public abstract class MDSSearchService extends Service {
      * that matches this criteria.
      * @throws ServiceException
      */
-    public abstract Pair<List<DatasetRecordBean>,Integer> getDatasets(Date updateDateFrom,Date updateDateTo,String setspec,int offset,int length) throws ServiceException;
-
+  //  public abstract Pair<List<DatasetRecordBean>,Integer> getDatasets(Date updateDateFrom,Date updateDateTo,String setspec,int offset,int length) throws ServiceException;
+    public abstract Pair<List<DatasetRecordBean>,Integer> getDatasets(Date updateDateFrom,Date updateDateTo,String setspec,int offset,int length,String metadataPrefix) throws ServiceException;
     /**
      * Returns a Pair object containing the list of resulting SetRecordBean objects and an integer which is the total record count for the query.
      * @param offset The offset at which to begin returning records from the resulting dataset.

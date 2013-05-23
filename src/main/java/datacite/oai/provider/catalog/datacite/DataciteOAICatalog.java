@@ -159,7 +159,7 @@ public class DataciteOAICatalog extends AbstractCatalog {
         try {
             ServiceCollection services = ServiceCollection.getInstance();
             MDSSearchService doiService = services.getMDSSearchService();
-            results = doiService.getDatasets(fromDate,untilDate,set,0,maxListSize );
+            results = doiService.getDatasets(fromDate,untilDate,set,0,maxListSize,metadataPrefix );
         } catch (Exception e) {
             logger.error("listIdentifiers error", e);
             throw new OAIInternalServerError(e);
@@ -265,7 +265,7 @@ public class DataciteOAICatalog extends AbstractCatalog {
         try {
             ServiceCollection services = ServiceCollection.getInstance();
             MDSSearchService doiService = services.getMDSSearchService();
-            results = doiService.getDatasets( fromDate, untilDate, set, previousRecordCount, maxListSize );
+            results = doiService.getDatasets( fromDate, untilDate, set, previousRecordCount, maxListSize, metadataPrefix );
         } catch (Exception e) {
             logger.error("listIdentifiers error", e);
             throw new OAIInternalServerError(e);
@@ -413,7 +413,7 @@ public class DataciteOAICatalog extends AbstractCatalog {
         try {
             ServiceCollection services = ServiceCollection.getInstance();
             MDSSearchService doiService = services.getMDSSearchService();
-            results = doiService.getDatasets( fromDate, untilDate,set, 0, maxListSize );
+            results = doiService.getDatasets( fromDate, untilDate,set, 0, maxListSize, metadataPrefix );
         } catch (Exception e) {
             logger.error("listRecords error", e);
             throw new OAIInternalServerError(e);
@@ -515,7 +515,7 @@ public class DataciteOAICatalog extends AbstractCatalog {
         try {
             ServiceCollection services = ServiceCollection.getInstance();
             MDSSearchService doiService = services.getMDSSearchService();
-            results = doiService.getDatasets( fromDate, untilDate, set, previousRecordCount, maxListSize );
+            results = doiService.getDatasets( fromDate, untilDate, set, previousRecordCount, maxListSize, metadataPrefix );
         } catch (Exception e) {
             logger.error("listRecords error", e);
             throw new OAIInternalServerError(e);

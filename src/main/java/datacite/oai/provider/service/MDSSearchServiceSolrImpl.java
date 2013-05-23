@@ -91,6 +91,19 @@ public class MDSSearchServiceSolrImpl extends MDSSearchService {
         String schemaVersion = (String) doc.getFieldValue("schema_version");
 
         DatasetRecordBean record = new DatasetRecordBean(id, metadata, schemaVersion, updateDate, refQuality, isActive, symbol);
+        byte[] difxml = (byte[]) doc.getFieldValue("dif");
+        if (difxml != null){
+           String dif= "";
+           dif = new String(BOMUtil.removeBOM(difxml, "UTF-8"), "UTF-8");
+           record.setDif(dif);
+        }
+        byte[] isoxml = (byte[]) doc.getFieldValue("iso");
+        if (isoxml != null){
+           String iso= "";
+           iso = new String(BOMUtil.removeBOM(isoxml, "UTF-8"), "UTF-8");
+           record.setIso(iso);
+        }
+
         return record;
     }
 
@@ -100,10 +113,16 @@ public class MDSSearchServiceSolrImpl extends MDSSearchService {
             list.add(convertToRecord(doc));
         return list;
     }
+    
+    public Pair<List<DatasetRecordBean>, Integer> getDatasets(Date updateDateFrom, Date updateDateTo, String setspec,
+            int offset, int length) throws ServiceException {
+	return getDatasets(updateDateFrom, updateDateTo, setspec, offset, length, null);
+    }
+
 
     @Override
     public Pair<List<DatasetRecordBean>, Integer> getDatasets(Date updateDateFrom, Date updateDateTo, String setspec,
-            int offset, int length) throws ServiceException {
+            int offset, int length, String metadataPrefix) throws ServiceException {
         SolrQuery query = new SolrQuery();
         query.setQuery("*:*");
         query.setRows(length);
@@ -131,6 +150,12 @@ public class MDSSearchServiceSolrImpl extends MDSSearchService {
 
         query.addFilterQuery("uploaded:[" + from + " TO " + to + "]");
 
+	if (metadataPrefix!=null && metadataPrefix.equalsIgnoreCase("dif"))
+		query.addFilterQuery("has_dif:true");
+
+	if (metadataPrefix!=null && metadataPrefix.equalsIgnoreCase("iso19139")){
+		query.addFilterQuery("has_iso:true OR has_dif:true");
+	}
         logger.info(query);
 
         try {

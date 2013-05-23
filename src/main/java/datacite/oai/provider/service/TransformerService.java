@@ -45,6 +45,7 @@ public class TransformerService extends Service {
     private Templates kernel2_0ToOaidcTemplates;
     private Templates kernel2_1ToOaidcTemplates;
     private Templates kernel2_2ToOaidcTemplates;
+    private Templates DIFtoISOTemplates;
 
     /**
      * Public constructor
@@ -74,6 +75,12 @@ public class TransformerService extends Service {
             domSource = buildDOMSource(context.getResourceAsStream(resourcePath));            
             kernel2_2ToOaidcTemplates = TransformerFactory.newInstance().newTemplates(domSource);
             
+
+            logger.warn("Loading DIF_to_ISO transform");
+            resourcePath = applicationContext.getProperty(Constants.Property.STYLESHEET_DIFtoISO);
+            domSource = buildDOMSource(context.getResourceAsStream(resourcePath));            
+            DIFtoISOTemplates = TransformerFactory.newInstance().newTemplates(domSource);
+
             logger.warn("TransformerService loaded.");
 
         } 
@@ -121,6 +128,10 @@ public class TransformerService extends Service {
         return doTransform_kernelToOaidc(metadata,this.kernel2_2ToOaidcTemplates,Constants.SchemaVersion.VERSION_2_2);
     }
     
+    public String doTransform_DIFtoISO(String metadata) throws ServiceException{
+        return doTransform_kernelToOaidc(metadata,this.DIFtoISOTemplates,"DIF to ISO");
+    }
+
     /**
      * Transform DataCite Metadata Scheme to OAI Dublin Core.
      * @param metadata the metadata to transform
