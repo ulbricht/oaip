@@ -97,6 +97,12 @@ public class MDSSearchServiceSolrImpl extends MDSSearchService {
            dif = new String(BOMUtil.removeBOM(difxml, "UTF-8"), "UTF-8");
            record.setDif(dif);
         }
+        byte[] isoxml = (byte[]) doc.getFieldValue("iso");
+        if (isoxml != null){
+           String iso= "";
+           iso = new String(BOMUtil.removeBOM(isoxml, "UTF-8"), "UTF-8");
+           record.setIso(iso);
+        }
 
         return record;
     }
@@ -144,9 +150,12 @@ public class MDSSearchServiceSolrImpl extends MDSSearchService {
 
         query.addFilterQuery("uploaded:[" + from + " TO " + to + "]");
 
-		  if (metadataPrefix!=null && metadataPrefix.equalsIgnoreCase("dif"))
-			   query.addFilterQuery("has_dif:true");
+	if (metadataPrefix!=null && metadataPrefix.equalsIgnoreCase("dif"))
+		query.addFilterQuery("has_dif:true");
 
+	if (metadataPrefix!=null && metadataPrefix.equalsIgnoreCase("iso19139")){
+		query.addFilterQuery("has_iso:true OR has_dif:true");
+	}
         logger.info(query);
 
         try {
