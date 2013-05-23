@@ -57,7 +57,9 @@ public class Datacite2Oai_dc extends Crosswalk{
             ServiceCollection services = ServiceCollection.getInstance();
             TransformerService transformerService = services.getTransformerService();
             
-            if (dataset.getSchemaVersion().equalsIgnoreCase(Constants.SchemaVersion.VERSION_2_2)){
+				result = transformerService.doTransform_IgsnToOaidc(dataset.getMetadata());
+
+  /*          if (dataset.getSchemaVersion().equalsIgnoreCase(Constants.SchemaVersion.VERSION_2_2)){
                 result = transformerService.doTransform_Kernel2_2ToOaidc(dataset.getMetadata());
             }
             else if (dataset.getSchemaVersion().equalsIgnoreCase(Constants.SchemaVersion.VERSION_2_1)){
@@ -65,7 +67,7 @@ public class Datacite2Oai_dc extends Crosswalk{
             }
             else{
                 result = transformerService.doTransform_Kernel2_0ToOaidc(dataset.getMetadata());
-            }           
+            }           */
         } 
         catch(ServiceException e) {
             logger.error("Error transforming dataset", e);

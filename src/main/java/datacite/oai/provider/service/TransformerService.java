@@ -45,8 +45,7 @@ public class TransformerService extends Service {
     private Templates kernel2_0ToOaidcTemplates;
     private Templates kernel2_1ToOaidcTemplates;
     private Templates kernel2_2ToOaidcTemplates;
-    private Templates DIFtoISOTemplates;
-
+	 private Templates igsnToOaidcTemplates;
     /**
      * Public constructor
      * @param context
@@ -74,13 +73,10 @@ public class TransformerService extends Service {
             resourcePath = applicationContext.getProperty(Constants.Property.STYLESHEET_KERNEL2_2_TO_OAIDC);
             domSource = buildDOMSource(context.getResourceAsStream(resourcePath));            
             kernel2_2ToOaidcTemplates = TransformerFactory.newInstance().newTemplates(domSource);
+
+            domSource = buildDOMSource(context.getResourceAsStream("/xsl/igsn_to_oaidc.xsl"));            
+            igsnToOaidcTemplates = TransformerFactory.newInstance().newTemplates(domSource);
             
-
-            logger.warn("Loading DIF_to_ISO transform");
-            resourcePath = applicationContext.getProperty(Constants.Property.STYLESHEET_DIFtoISO);
-            domSource = buildDOMSource(context.getResourceAsStream(resourcePath));            
-            DIFtoISOTemplates = TransformerFactory.newInstance().newTemplates(domSource);
-
             logger.warn("TransformerService loaded.");
 
         } 
@@ -127,11 +123,13 @@ public class TransformerService extends Service {
     public String doTransform_Kernel2_2ToOaidc(String metadata) throws ServiceException{
         return doTransform_kernelToOaidc(metadata,this.kernel2_2ToOaidcTemplates,Constants.SchemaVersion.VERSION_2_2);
     }
-    
-    public String doTransform_DIFtoISO(String metadata) throws ServiceException{
-        return doTransform_kernelToOaidc(metadata,this.DIFtoISOTemplates,"DIF to ISO");
+
+
+    public String doTransform_IgsnToOaidc(String metadata) throws ServiceException{
+        return doTransform_kernelToOaidc(metadata,this.igsnToOaidcTemplates,"IGSN-Schema-Version");
     }
 
+    
     /**
      * Transform DataCite Metadata Scheme to OAI Dublin Core.
      * @param metadata the metadata to transform

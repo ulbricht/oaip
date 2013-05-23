@@ -54,7 +54,6 @@ public final class Constants {
         public static final String STYLESHEET_KERNEL2_0_TO_OAIDC = "stylesheet.kernel2.0_to_oaidc";
         public static final String STYLESHEET_KERNEL2_1_TO_OAIDC = "stylesheet.kernel2.1_to_oaidc";
         public static final String STYLESHEET_KERNEL2_2_TO_OAIDC = "stylesheet.kernel2.2_to_oaidc";
-        public static final String STYLESHEET_DIFtoISO = "stylesheet.DIFtoISO";
                 
         public static final String MDS_MAX_LIST_SIZE = "DataciteOAICatalog.maxListSize";
         public static final String MDS_SETCACHE_EXPIRY_SECONDS = "mdssetcache.expiry.seconds";        

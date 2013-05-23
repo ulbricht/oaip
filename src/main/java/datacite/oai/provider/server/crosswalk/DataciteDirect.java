@@ -22,11 +22,11 @@ import datacite.oai.provider.catalog.datacite.DatasetRecordBean;
 public class DataciteDirect extends Crosswalk {
 
     public DataciteDirect(Properties properties) throws OAIInternalServerError {
-        super("http://datacite.org/schema/nonexistant http://schema.datacite.org/meta/nonexistant/nonexistant.xsd");
+        super("http://igsn.org/schema/nonexistant http://schema.igsn.org/meta/nonexistant/nonexistant.xsd");
     }
 
     public DataciteDirect(String schema, Properties properties) throws OAIInternalServerError {
-        super("http://datacite.org/schema/nonexistant http://schema.datacite.org/meta/nonexistant/nonexistant.xsd");
+        super("http://igsn.org/schema/nonexistant http://schema.igsn.org/meta/nonexistant/nonexistant.xsd");
     }
         
     @Override
