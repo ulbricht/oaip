@@ -14,7 +14,6 @@ package datacite.oai.provider.service;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.SortedSet;
@@ -69,7 +68,6 @@ public class MDSSearchServiceSolrImpl extends MDSSearchService {
     public DatasetRecordBean getDatasetByID(String id) throws ServiceException {
         SolrQuery query = new SolrQuery();
         query.setQuery("dataset_id:" + id);
-        query.addFilterQuery("has_metadata:true");
 
         try {
             QueryResponse response = solrServer.query(query);
@@ -88,7 +86,7 @@ public class MDSSearchServiceSolrImpl extends MDSSearchService {
         byte[] xml = (byte[]) doc.getFieldValue("xml");
         Date updateDate = (Date) doc.getFieldValue("updated");
         Boolean refQuality = (Boolean) doc.getFieldValue("refQuality");
-        Boolean isActive = (Boolean) doc.getFieldValue("has_metadata");
+        Boolean isActive = (Boolean) doc.getFieldValue("has_metadata") && (Boolean) doc.getFieldValue("is_active");
         String schemaVersion = (String) doc.getFieldValue("schema_version");
 
         DatasetRecordBean record = new DatasetRecordBean(id, xml, schemaVersion, updateDate, refQuality, isActive, symbol);
@@ -128,7 +126,6 @@ public class MDSSearchServiceSolrImpl extends MDSSearchService {
         query.setRows(length);
         query.setStart(offset);
         query.setSortField("updated", ORDER.asc);
-        query.addFilterQuery("has_metadata:true");
 
         setspec = StringUtils.trimToEmpty(setspec);
         if (setspec.contains(Constants.Set.BASE64_PART_DELIMITER)) {
