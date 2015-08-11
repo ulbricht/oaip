@@ -30,6 +30,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
    
 <!--  
+  2012-01-11 ulbricht@gfz-potsdam.de 
+  Added support for metadataPrefix=iso19139
+
   2012-03-21 ulbricht@gfz-potsdam.de 
   Added support for metadataPrefix=dif
 
@@ -60,8 +63,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
     xmlns:oai="http://www.openarchives.org/OAI/2.0/"
 >
 
-<xsl:output method="html"/>
-
+<xsl:output method="html"
+doctype-public="-//W3C//DTD HTML 4.01//EN"
+doctype-system="http://www.w3.org/TR/html4/strict.dtd"
+/>
 
 
 <xsl:template name="style">
@@ -167,7 +172,7 @@ p.intro {
 <html>
   <head>
     <title>OAI 2.0 Request Results</title>
-    <style><xsl:call-template name="style"/></style>
+    <style type="text/css"><xsl:call-template name="style"/></style>
   </head>
   <body>
 
@@ -523,9 +528,11 @@ p.intro {
 
       <xsl:value-of select="oai:identifier"/>
       <xsl:text> </xsl:text><a class="link" href="?verb=GetRecord&amp;metadataPrefix=oai_dc&amp;identifier={oai:identifier}">oai_dc</a>
+
 <!--      <xsl:text> </xsl:text><a class="link" href="?verb=GetRecord&amp;metadataPrefix=oai_datacite&amp;identifier={oai:identifier}">oai_datacite</a>-->
       <xsl:text> </xsl:text><a class="link" href="?verb=GetRecord&amp;metadataPrefix=igsn&amp;identifier={oai:identifier}">igsn</a>
 <!--      <xsl:text> </xsl:text><a class="link" href="?verb=GetRecord&amp;metadataPrefix=dif&amp;identifier={oai:identifier}">dif</a>-->
+
       <xsl:text> </xsl:text><a class="link" href="?verb=ListMetadataFormats&amp;identifier={oai:identifier}">formats</a>
     </td></tr>
     <tr><td class="key">Datestamp</td>
