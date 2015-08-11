@@ -1,4 +1,4 @@
 ##Populate with connection properties for solr connections.
 mds.solr.url=http://search.datacite.org
-mds.solr.username=[username]
-mds.solr.password=[password]
+mds.solr.username=solr
+mds.solr.password=solr

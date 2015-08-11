@@ -13,7 +13,6 @@ package datacite.oai.provider.catalog.datacite;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,9 +28,10 @@ public class DatasetRecordBean implements Serializable{
     private static final long serialVersionUID = 1L;
     
     private String id;
-    private String metadata;
-    private String dif;
-	 private String iso;
+    private byte[] metadata;
+    private byte[] dif;
+    private byte[] iso;
+
     private Date updateDate;
     
     private String symbol;
@@ -49,7 +49,7 @@ public class DatasetRecordBean implements Serializable{
      * @param isActive
      * @param symbol
      */
-    public DatasetRecordBean(String id,String metadata,String schemaVersion, Date updateDate,boolean refQuality,boolean isActive,String symbol){
+    public DatasetRecordBean(String id,byte[] metadata,String schemaVersion, Date updateDate,boolean refQuality,boolean isActive,String symbol){
         this.id = id;        
         this.updateDate = updateDate;
         this.refQuality = refQuality;
@@ -63,17 +63,17 @@ public class DatasetRecordBean implements Serializable{
 	iso=null;
     }
 
-    public void setDif(String dif) {
-        this.dif = dif.replaceAll("(<!--.*-->)","").replaceAll("(<\\?xml.*\\?>)","");
+    public void setDif(byte[] dif) {
+        this.dif = dif;
     }
-    public String getDif() {
+    public byte[] getDif() {
         return this.dif;
     }
 
-    public void setIso(String iso) {
-        this.iso = iso.replaceAll("(<!--.*-->)","").replaceAll("(<\\?xml.*\\?>)","");
+    public void setIso(byte[]iso) {
+        this.iso = iso;
     }
-    public String getIso() {
+    public byte[] getIso() {
         return this.iso;
     }
 
@@ -81,12 +81,11 @@ public class DatasetRecordBean implements Serializable{
         return this.id;
     }
 
-    public void setMetadata(String metadata){
-        //remove xml declaration, comment blocks, and everything before <resource>
-        this.metadata = metadata.replaceAll("(<!--.*-->)","").replaceAll("(<\\?xml.*\\?>)","");        
+    public void setMetadata(byte[] metadata){
+    	this.metadata = metadata;
     }
     
-    public String getMetadata() {
+    public byte[] getMetadata() {
         return this.metadata;
     }
 

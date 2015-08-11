@@ -2,10 +2,13 @@
     <Parameter name="environmentLabel" value="PROD environment"/>
 
 	<Parameter name="mdssetcache.expiry.seconds" value="600" />
+	<Parameter name="stylesheet.identity" value="/xsl/identitytransform.xsl" />
 	<Parameter name="stylesheet.kernel2.0_to_oaidc" value="/xsl/kernel2.0_to_oaidc.xsl" />
 	<Parameter name="stylesheet.kernel2.1_to_oaidc" value="/xsl/kernel2.1_to_oaidc.xsl" />
 	<Parameter name="stylesheet.kernel2.2_to_oaidc" value="/xsl/kernel2.2_to_oaidc.xsl" />
-	<Parameter name="stylesheet.DIFtoISO" value="/xsl/DIF-ISO-3.0.xsl" />
+	<Parameter name="stylesheet.kernel2.3_to_oaidc" value="/xsl/kernel2.3_to_oaidc.xsl" />
+	<Parameter name="stylesheet.kernel3_to_oaidc" value="/xsl/kernel3_to_oaidc.xsl" />
+	<Parameter name="stylesheet.DIFtoISO" value="/xsl/DIF-ISO-3.0.xsl" />	
 
 	<!-- file containing DB connection strings -->
 	<Parameter name="db.properties" value="/WEB-INF/classes/database.properties" />
@@ -29,7 +32,7 @@
 	<Parameter name="datacitemds.Identify.repositoryName" value="DOIDB Metadata Store" />
 	<Parameter name="datacitemds.Identify.adminEmail" value="ulbricht@gfz-potsdam.de" />
 	<Parameter name="datacitemds.Identify.earliestDatestamp" value="2011-01-01T00:00:00Z" />
-	<Parameter name="datacitemds.Identify.deletedRecord" value="no" />
+	<Parameter name="datacitemds.Identify.deletedRecord" value="persistent" />
 	<Parameter name="datacitemds.Identify.repositoryIdentifier" value="doidb.wdc-terra.org" />
 	<Parameter name="datacitemds.Identify.sampleIdentifier" value="oai:doidb.wdc-terra.org:12425" />
 	<Parameter name="datacitemds.Crosswalks.oai_datacite" value="datacite.oai.provider.server.crosswalk.OaiDatacite" />
