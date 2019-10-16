@@ -100,7 +100,17 @@ public class TransformerService extends Service {
             Templates kernel3ToOaidcTemplates = TransformerFactory.newInstance().newTemplates(domSource);
             templatesMap.put(Constants.SchemaVersion.VERSION_3_0, kernel3ToOaidcTemplates);
             templatesMap.put(Constants.SchemaVersion.VERSION_3_1, kernel3ToOaidcTemplates); //version 3.1 uses same transform as 3.0
+
+
+            logger.warn("Loading Kernel 4 transforms");
+            resourcePath = applicationContext.getProperty(Constants.Property.STYLESHEET_KERNEL4_TO_OAIDC);
+            domSource = buildDOMSource(context.getResourceAsStream(resourcePath));            
+            
+            Templates kernel4ToOaidcTemplates = TransformerFactory.newInstance().newTemplates(domSource);
+            templatesMap.put(Constants.SchemaVersion.VERSION_4_0, kernel4ToOaidcTemplates);
+            templatesMap.put(Constants.SchemaVersion.VERSION_4_1, kernel4ToOaidcTemplates); //version 4.1 uses same transform as 4.0
                         
+
 
             logger.warn("Loading DIF_to_ISO transform");
             resourcePath = applicationContext.getProperty(Constants.Property.STYLESHEET_DIFtoISO);
@@ -136,8 +146,12 @@ public class TransformerService extends Service {
      */
     public String doTransformKernelToOaidc(String schemaVersion, byte[] metadata) throws ServiceException {
     	try{
-    		Templates transform = getTransform(schemaVersion);    	    	    	
-    		return doTransform(metadata,transform);
+
+    		//logger.info( "Transforming "+schemaVersion+" to OAIDC: " + new String (metadata) );
+    		Templates transform = getTransform(schemaVersion);
+		String transformed=doTransform(metadata,transform);
+    		//logger.info( "Transformed "+transformed );
+    		return transformed;
     	}
     	catch(Exception e){
     		logger.error( "Unable to transform Kernel "+schemaVersion+" to OAIDC: " + metadata, e );
