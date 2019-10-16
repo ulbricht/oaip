@@ -528,8 +528,8 @@ p.intro {
       <xsl:text> </xsl:text><a class="link" href="?verb=GetRecord&amp;metadataPrefix=oai_dc&amp;identifier={oai:identifier}">oai_dc</a>
 <!--      <xsl:text> </xsl:text><a class="link" href="?verb=GetRecord&amp;metadataPrefix=oai_datacite&amp;identifier={oai:identifier}">oai_datacite</a>-->
       <xsl:text> </xsl:text><a class="link" href="?verb=GetRecord&amp;metadataPrefix=igsn&amp;identifier={oai:identifier}">igsn</a>
-      <xsl:text> </xsl:text><a class="link" href="?verb=GetRecord&amp;metadataPrefix=dif&amp;identifier={oai:identifier}">dif</a>
-      <xsl:text> </xsl:text><a class="link" href="?verb=GetRecord&amp;metadataPrefix=iso19139&amp;identifier={oai:identifier}">iso19139</a>
+      <xsl:text> </xsl:text><a class="link" href="?verb=GetRecord&amp;metadataPrefix=igsngfz&amp;identifier={oai:identifier}">igsngfz</a>
+      <xsl:text> </xsl:text><a class="link" href="?verb=GetRecord&amp;metadataPrefix=igsndescription&amp;identifier={oai:identifier}">igsndescription</a>
       <xsl:text> </xsl:text><a class="link" href="?verb=ListMetadataFormats&amp;identifier={oai:identifier}">formats</a>
     </td></tr>
     <tr><td class="key">Datestamp</td>
@@ -613,14 +613,17 @@ p.intro {
   	<xsl:when test="name()='oai_datacite'">
   		<h3>OAI DataCite Metadata (oai_datacite)</h3>
   	</xsl:when>
-  	<xsl:when test="name()='resource'">
-  		<h3>DataCite Metadata (datacite)</h3>
+  	<xsl:when test="name()='resource' and starts-with(namespace-uri(),'http://pmd.gfz-potsdam.de')">
+  		<h3>IGSN GFZ Allocating Agent Metadata </h3>
   	</xsl:when>
-  	<xsl:when test="name()='DIF'">
-  		<h3>NASA DIF Metadata</h3>
+  	<xsl:when test="name()='resource'">
+  		<h3>IGSN Description Schema Metadata</h3>
+  	</xsl:when>
+  	<xsl:when test="name()='sample'">
+  		<h3>IGSN Registration Schema Metadata </h3>
   	</xsl:when>
   	<xsl:when test="name()='gmd:MD_Metadata'">
-  		<h3>ISO19139 Metadata</h3>
+  		<h3>ISO19139 metadata</h3>
   	</xsl:when>
   	<xsl:otherwise>
 		<h3>Unknown Metadata Format</h3>  	

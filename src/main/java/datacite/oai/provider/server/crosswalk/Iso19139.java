@@ -29,11 +29,11 @@ public class Iso19139 extends Crosswalk {
     private static final Logger logger = Logger.getLogger(Iso19139.class);
 
     public Iso19139(Properties properties) throws OAIInternalServerError {
-        super("http://www.isotc211.org/2005/gmd http://www.isotc211.org/2005/gmd/gmd.xsd");
+        super("http://schema.igsn.org/description/1.0 http://schema.igsn.org/description/1.0/resource.xsd");
     }
 
     public Iso19139(String schema, Properties properties) throws OAIInternalServerError {
-        super("http://www.isotc211.org/2005/gmd http://www.isotc211.org/2005/gmd/gmd.xsd");
+        super("http://schema.igsn.org/description/1.0 http://schema.igsn.org/description/1.0/resource.xsd");
     }
         
     @Override

@@ -22,11 +22,11 @@ import datacite.oai.provider.catalog.datacite.DatasetRecordBean;
 public class NasaDif extends Crosswalk {
 
     public NasaDif(Properties properties) throws OAIInternalServerError {
-        super("http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/ http://gcmd.nasa.gov/Aboutus/xml/dif/dif_v9.8.2.xsd");
+        super("http://pmd.gfz-potsdam.de/igsn/schemas/description/1.1 http://pmd.gfz-potsdam.de/igsn/schemas/description/1.1/resource.xsd");
     }
 
     public NasaDif(String schema, Properties properties) throws OAIInternalServerError {
-        super("http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/ http://gcmd.nasa.gov/Aboutus/xml/dif/dif_v9.8.2.xsd");
+        super("http://pmd.gfz-potsdam.de/igsn/schemas/description/1.1 http://pmd.gfz-potsdam.de/igsn/schemas/description/1.1/resource.xsd");
     }
         
     @Override

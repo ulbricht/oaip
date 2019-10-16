@@ -30,10 +30,11 @@
 </ul></p>  
 <p>The verbs and parameters can be combined to issue requests to the service such as:</p>
 <p><ul style="list-style: none;">
-<li><code><a href="oai?verb=Identify">http://doidb.wdc-terra.org/oaip/oai?verb=Identify</a></code> for a repository identification</li>
-<li><code><a href="oai?verb=ListIdentifiers&metadataPrefix=oai_dc">http://doidb.wdc-terra.org/oaip/oai?verb=ListIdentifiers&amp;metadataPrefix=oai_dc</a></code> to list all registered datasets</li>
-<li><code><a href="oai?verb=ListIdentifiers&metadataPrefix=dif">http://doidb.wdc-terra.org/oaip/oai?verb=ListIdentifiers&amp;metadataPrefix=dif</a></code> to list all registered datasets that have a NASA-DIF record</li>
-<li><code><a href="oai?verb=ListRecords&from=2011-06-01T00:00:00Z&metadataPrefix=oai_dc">http://doidb.wdc-terra.org/oaip/oai?verb=ListRecords&amp;from=2011-06-01T00:00:00Z&amp;metadataPrefix=oai_dc</a></code> to list new/updated records since 1st June 2011</li>
+<li><code><a href="oai?verb=Identify">http://doidb.wdc-terra.org/igsnaaoaip/oai?verb=Identify</a></code> for a repository identification</li>
+<li><code><a href="oai?verb=ListIdentifiers&metadataPrefix=oai_dc">http://doidb.wdc-terra.org/igsnaaoaip/oai?verb=ListIdentifiers&amp;metadataPrefix=oai_dc</a></code> to list all registered datasets</li>
+<li><code><a href="oai?verb=ListIdentifiers&metadataPrefix=igsndescription">http://doidb.wdc-terra.org/igsnaaoaip/oai?verb=ListIdentifiers&amp;metadataPrefix=igsndescription</a></code> to list all registered datasets that have a IGSN Description Schema record</li>
+<li><code><a href="oai?verb=ListIdentifiers&metadataPrefix=igsngfz">http://doidb.wdc-terra.org/igsnaaoaip/oai?verb=ListIdentifiers&amp;metadataPrefix=igsngfz</a></code> to list all registered datasets that have a GFZ Description Schema record</li>
+<li><code><a href="oai?verb=ListRecords&from=2011-06-01T00:00:00Z&metadataPrefix=oai_dc">http://doidb.wdc-terra.org/igsnaaoaip/oai?verb=ListRecords&amp;from=2011-06-01T00:00:00Z&amp;metadataPrefix=oai_dc</a></code> to list new/updated records since 1st June 2011</li>
 </ul></p>
 <p>For more details on the protocol, its implementation, and uses please visit the <a href="http://www.openarchives.org/pmh/">OAI-PMH web site</a>.
 <h2>Available Metadata Formats</h2>
