@@ -1,0 +1,13 @@
+version: '2'
+
+services:
+  oaip:
+    environment:
+      - LOG_LEVEL=INFO
+    image: datacite/oaip
+    ports:
+      - "8030:80"
+    volumes:
+      - ~/.m2:/root/.m2
+      - ./spec:/home/app/spec
+

@@ -3,10 +3,10 @@ package datacite.oai.provider.service;
 /*******************************************************************************
 * Copyright (c) 2011 DataCite
 *
-* All rights reserved. This program and the accompanying 
-* materials are made available under the terms of the 
-* Apache License, Version 2.0 which accompanies 
-* this distribution, and is available at 
+* All rights reserved. This program and the accompanying
+* materials are made available under the terms of the
+* Apache License, Version 2.0 which accompanies
+* this distribution, and is available at
 * http://www.apache.org/licenses/LICENSE-2.0
 *
 *******************************************************************************/
@@ -56,13 +56,13 @@ public class MDSSearchServiceSolrImpl extends MDSSearchService {
         super(servletContext);
         try {
             ApplicationContext context = ApplicationContext.getInstance();
-            
+
             String url = context.getProperty(Constants.Database.MDS_SOLR_URL);
             solrServer = new CommonsHttpSolrServer(url);
         } catch (Exception e) {
             throw new ServiceException(e);
         }
-    }    
+    }
 
     @Override
     public DatasetRecordBean getDatasetByID(String id) throws ServiceException {
@@ -85,11 +85,10 @@ public class MDSSearchServiceSolrImpl extends MDSSearchService {
         String symbol = (String) doc.getFieldValue("datacentre_symbol");
         byte[] xml = (byte[]) doc.getFieldValue("xml");
         Date updateDate = (Date) doc.getFieldValue("updated");
-        Boolean refQuality = (Boolean) doc.getFieldValue("refQuality");
         Boolean isActive = (Boolean) doc.getFieldValue("has_metadata") && (Boolean) doc.getFieldValue("is_active");
         String schemaVersion = (String) doc.getFieldValue("schema_version");
 
-        DatasetRecordBean record = new DatasetRecordBean(id, xml, schemaVersion, updateDate, refQuality, isActive, symbol);
+        DatasetRecordBean record = new DatasetRecordBean(id, xml, schemaVersion, updateDate, isActive, symbol);
         return record;
     }
 
@@ -103,10 +102,10 @@ public class MDSSearchServiceSolrImpl extends MDSSearchService {
     @Override
     public Pair<List<DatasetRecordBean>, Integer> getDatasets(Date updateDateFrom, Date updateDateTo, String setspec,
             int offset, int length) throws ServiceException {
-        
+
         SolrQuery query = constructSolrQuery(updateDateFrom, updateDateTo, setspec, offset, length);
 
-        logger.info(query);
+        logger.debug(query);
 
         try {
             QueryResponse response = solrServer.query(query);
@@ -119,7 +118,7 @@ public class MDSSearchServiceSolrImpl extends MDSSearchService {
             throw new ServiceException(e);
         }
     }
-    
+
     static SolrQuery constructSolrQuery(Date updateDateFrom, Date updateDateTo, String setspec, int offset, int length) throws ServiceException {
         SolrQuery query = new SolrQuery();
         query.setQuery("*:*");
@@ -135,12 +134,12 @@ public class MDSSearchServiceSolrImpl extends MDSSearchService {
             String solrfilter = new String(Base64.decodeBase64(base64));
             logger.info("decoded base64 setspec: " + solrfilter);
             solrfilter = solrfilter.replaceAll("^[?&]+", "");
-            
+
             List<NameValuePair> params = URLEncodedUtils.parse(solrfilter, Charset.defaultCharset());
             for (NameValuePair param : params) {
                 String name = param.getName();
                 String value = param.getValue();
-                if (name.equals("q")) 
+                if (name.equals("q"))
                     query.setQuery(value);
                 else if (name.equals("fq"))
                     query.addFilterQuery(value);
@@ -148,29 +147,21 @@ public class MDSSearchServiceSolrImpl extends MDSSearchService {
                     throw new ServiceException("parameter '" + name + "' is not supported");
             }
         }
-        
-        
+
+
         if (setspec != null && setspec.trim().length() > 0) {
             setspec = setspec.trim().toUpperCase();
 
-            if (setspec.equalsIgnoreCase(Constants.Set.REF_QUALITY)) {
-                query.addFilterQuery("refQuality:true");
-            } else {
-                if (setspec.endsWith(Constants.Set.REF_QUALITY_SUFFIX)) {
-                    query.addFilterQuery("refQuality:true");
-                    setspec = setspec.substring(0, setspec.lastIndexOf(Constants.Set.REF_QUALITY_SUFFIX));
-                }
-                String field = setspec.contains(".") ? "datacentre_symbol" : "allocator_symbol";
-                query.addFilterQuery(field + ":" + setspec);
-            }
+            String field = setspec.contains(".") ? "datacentre_symbol" : "allocator_symbol";
+            query.addFilterQuery(field + ":" + setspec);
         }
 
         String from = dateFormat.format(updateDateFrom);
         String to = dateFormat.format(updateDateTo);
 
         query.addFilterQuery("updated:[" + from + " TO " + to + "]");
-        
-        query.setParam(CommonParams.QT, "/public/api");
+
+        query.setParam(CommonParams.QT, "/api");
 
         return query;
     }
@@ -213,13 +204,13 @@ public class MDSSearchServiceSolrImpl extends MDSSearchService {
 	@Override
 	public boolean getStatus() throws ServiceException {
 		logger.info("MDS Search Service status check...");
-		
+
 		try{
 			SolrPingResponse response = solrServer.ping();
 			if (response != null && response.getStatus() == 0){
 				logger.info("Service status: OK");
 				logger.info("[Elapsed time: "+response.getElapsedTime()+" Status code: "+response.getStatus()+"]");
-				return true;				
+				return true;
 			}
 			else{
 				logger.warn("Service status: MDS search service unavailable.");
@@ -234,7 +225,7 @@ public class MDSSearchServiceSolrImpl extends MDSSearchService {
 		}
 	}
 
-	
+
     @Override
     public void destroy() {
     }
