@@ -42,11 +42,12 @@ import datacite.oai.provider.Constants;
 public class TransformerService extends Service {
 
     private static Logger logger = Logger.getLogger(TransformerService.class);
-    private HashMap<String,Templates> templatesMap;
+    private HashMap<String, Templates> templatesMap;
     private Templates identityTransform;
-    
+
     /**
      * Public constructor
+     * 
      * @param context
      * @throws ServiceException
      */
@@ -57,187 +58,145 @@ public class TransformerService extends Service {
         try {
             logger.warn("TransformerService loading...");
             ApplicationContext applicationContext = ApplicationContext.getInstance();
-            templatesMap = new HashMap<String,Templates>();
-            
+            templatesMap = new HashMap<String, Templates>();
+
             logger.warn("Loading Identity transform");
-            String resourcePath = applicationContext.getProperty(Constants.Property.STYLESHEET_IDENTITY);            
+            String resourcePath = applicationContext.getProperty(Constants.Property.STYLESHEET_IDENTITY);
             DOMSource domSource = buildDOMSource(context.getResourceAsStream(resourcePath));
             identityTransform = TransformerFactory.newInstance().newTemplates(domSource);
-            
-            logger.warn("Loading Kernel 2.0 transform");
-            resourcePath = applicationContext.getProperty(Constants.Property.STYLESHEET_KERNEL2_0_TO_OAIDC);            
-            domSource = buildDOMSource(context.getResourceAsStream(resourcePath));            
-            
-            Templates kernel2_0ToOaidcTemplates = TransformerFactory.newInstance().newTemplates(domSource);
-            templatesMap.put(Constants.SchemaVersion.VERSION_2_0,kernel2_0ToOaidcTemplates);
-            templatesMap.put(null, kernel2_0ToOaidcTemplates); //set version 2.0 as the default (null key) transform
-            
-            logger.warn("Loading Kernel 2.1 transform");
-            resourcePath = applicationContext.getProperty(Constants.Property.STYLESHEET_KERNEL2_1_TO_OAIDC);
-            domSource = buildDOMSource(context.getResourceAsStream(resourcePath));            
-            
-            Templates  kernel2_1ToOaidcTemplates = TransformerFactory.newInstance().newTemplates(domSource);
-            templatesMap.put(Constants.SchemaVersion.VERSION_2_1, kernel2_1ToOaidcTemplates);
-                        
-            logger.warn("Loading Kernel 2.2 transform");
-            resourcePath = applicationContext.getProperty(Constants.Property.STYLESHEET_KERNEL2_2_TO_OAIDC);
-            domSource = buildDOMSource(context.getResourceAsStream(resourcePath));            
-            
-            Templates kernel2_2ToOaidcTemplates = TransformerFactory.newInstance().newTemplates(domSource);
-            templatesMap.put(Constants.SchemaVersion.VERSION_2_2, kernel2_2ToOaidcTemplates);
-                        
-            logger.warn("Loading Kernel 2.3 transform");
-            resourcePath = applicationContext.getProperty(Constants.Property.STYLESHEET_KERNEL2_3_TO_OAIDC);
-            domSource = buildDOMSource(context.getResourceAsStream(resourcePath));            
-            
-            Templates kernel2_3ToOaidcTemplates = TransformerFactory.newInstance().newTemplates(domSource);
-            templatesMap.put(Constants.SchemaVersion.VERSION_2_3, kernel2_3ToOaidcTemplates);
-                        
-            logger.warn("Loading Kernel 3 transforms");
-            resourcePath = applicationContext.getProperty(Constants.Property.STYLESHEET_KERNEL3_TO_OAIDC);
-            domSource = buildDOMSource(context.getResourceAsStream(resourcePath));            
-            
-            Templates kernel3ToOaidcTemplates = TransformerFactory.newInstance().newTemplates(domSource);
-            templatesMap.put(Constants.SchemaVersion.VERSION_3_0, kernel3ToOaidcTemplates);
-            templatesMap.put(Constants.SchemaVersion.VERSION_3_1, kernel3ToOaidcTemplates); //version 3.1 uses same transform as 3.0
 
-
-            logger.warn("Loading Kernel 4 transforms");
-            resourcePath = applicationContext.getProperty(Constants.Property.STYLESHEET_KERNEL4_TO_OAIDC);
-            domSource = buildDOMSource(context.getResourceAsStream(resourcePath));            
-            
-            Templates kernel4ToOaidcTemplates = TransformerFactory.newInstance().newTemplates(domSource);
-            templatesMap.put(Constants.SchemaVersion.VERSION_4_0, kernel4ToOaidcTemplates);
-            templatesMap.put(Constants.SchemaVersion.VERSION_4_1, kernel4ToOaidcTemplates); //version 4.1 uses same transform as 4.0
-                        
-
+            logger.warn("Loading DataCite_to_oaidc transform");
+            resourcePath = applicationContext.getProperty(Constants.Property.STYLESHEET_DATACITEtoOAIDC);
+            domSource = buildDOMSource(context.getResourceAsStream(resourcePath));
+            Templates theDataCitetoOAIDCTemplate = TransformerFactory.newInstance().newTemplates(domSource);
+            templatesMap.put(Constants.SchemaVersion.DATACITE_TO_OAIDC, theDataCitetoOAIDCTemplate);
 
             logger.warn("Loading DIF_to_ISO transform");
             resourcePath = applicationContext.getProperty(Constants.Property.STYLESHEET_DIFtoISO);
-            domSource = buildDOMSource(context.getResourceAsStream(resourcePath));            
-	    
-            Templates theDIFtoISOTemplates = TransformerFactory.newInstance().newTemplates(domSource);	    
+            domSource = buildDOMSource(context.getResourceAsStream(resourcePath));
+            Templates theDIFtoISOTemplates = TransformerFactory.newInstance().newTemplates(domSource);
             templatesMap.put(Constants.SchemaVersion.VERSION_DIF_TO_ISO, theDIFtoISOTemplates);
-	    
+
             logger.warn("TransformerService loaded.");
 
-        } 
-        catch(TransformerConfigurationException te){
-        	throw new ServiceException(te.getMessageAndLocation(),te);
-        }
-        catch(Exception e) {
+        } catch (TransformerConfigurationException te) {
+            throw new ServiceException(te.getMessageAndLocation(), te);
+        } catch (Exception e) {
             logger.error("Could not load TransformerService", e);
             throw new ServiceException(e);
         }
     }
 
-    
     @Override
     public void destroy() {
     }
 
-    
     /**
      * Transform DataCite Metadata Scheme to OAI Dubmin Core.
+     * 
      * @param schemaVersion The schema verion being transformed.
-     * @param metadata The metadata to transform
+     * @param metadata      The metadata to transform
      * @return The resulting metadata as a String
      * @throws ServiceException
      */
     public String doTransformKernelToOaidc(String schemaVersion, byte[] metadata) throws ServiceException {
-    	try{
+        try {
 
-    		//logger.info( "Transforming "+schemaVersion+" to OAIDC: " + new String (metadata) );
-    		Templates transform = getTransform(schemaVersion);
-		String transformed=doTransform(metadata,transform);
-    		//logger.info( "Transformed "+transformed );
-    		return transformed;
-    	}
-    	catch(Exception e){
-    		logger.error( "Unable to transform Kernel "+schemaVersion+" to OAIDC: " + metadata, e );
-    		throw new ServiceException("Unable to transform Kernel "+schemaVersion+" to OAIDC", e );
-    	}
+            schemaVersion = Constants.SchemaVersion.DATACITE_TO_OAIDC;
+
+            logger.info("Transforming " + schemaVersion + " to OAIDC: " + new String(metadata));
+            Templates transform = getTransform(schemaVersion);
+            String transformed = doTransform(metadata, transform);
+            logger.info("Transformed " + transformed);
+            return transformed;
+        } catch (Exception e) {
+            logger.error("Unable to transform Kernel " + schemaVersion + " to OAIDC: " + metadata, e);
+            throw new ServiceException("Unable to transform Kernel " + schemaVersion + " to OAIDC", e);
+        }
     }
-    
-    
+
     /**
-     * Perform and Identity transform on input metadata. The transform is configured to output UTF-8.
+     * Perform and Identity transform on input metadata. The transform is configured
+     * to output UTF-8.
+     * 
      * @param metadata The metadata to transform
      * @return The resulting metadata as a String
      * @throws ServiceException
      */
     public String doTransformIdentity(byte[] metadata) throws ServiceException {
-    	try{
-    		return doTransform(metadata,identityTransform);
-    	}
-    	catch(Exception e){
-    		logger.error( "Unable to perform Identity transform: " + metadata, e );
-    		throw new ServiceException("Unable to perform Identity transform", e );
-    	}
+        try {
+            return doTransform(metadata, identityTransform);
+        } catch (Exception e) {
+            logger.error("Unable to perform Identity transform: " + metadata, e);
+            throw new ServiceException("Unable to perform Identity transform", e);
+        }
     }
-    
+
     public String doTransformDIFtoISO(byte[] metadata) throws ServiceException {
-		String schemaVersion=Constants.SchemaVersion.VERSION_DIF_TO_ISO;
-	try{
-    		Templates transform = getTransform(schemaVersion);    	    	    	
-    		return doTransform(metadata,transform);
-    	}
-    	catch(Exception e){
-    		logger.error( "Unable to transform "+schemaVersion+" to ISO: " + metadata, e );
-    		throw new ServiceException("Unable to transform "+schemaVersion+" to ISO", e );
-    	}
+        String schemaVersion = Constants.SchemaVersion.VERSION_DIF_TO_ISO;
+        try {
+            Templates transform = getTransform(schemaVersion);
+            return doTransform(metadata, transform);
+        } catch (Exception e) {
+            logger.error("Unable to transform " + schemaVersion + " to ISO: " + metadata, e);
+            throw new ServiceException("Unable to transform " + schemaVersion + " to ISO", e);
+        }
     }
 
     /**
      * Transform DataCite Metadata Scheme to OAI Dublin Core.
+     * 
      * @param metadata the metadata to transform
      * @param template the template to use
      * @return
      * @throws Exception
      */
-    private String doTransform(byte[] metadata,Templates template) throws Exception{
-    	// Configure input
-    	StreamSource streamSource = new StreamSource(new ByteArrayInputStream(metadata));
-    
-    	// Configure output
-    	StringWriter stringWriter = new StringWriter();
-    	StreamResult streamResult = new StreamResult(stringWriter);
+    private String doTransform(byte[] metadata, Templates template) throws Exception {
+        // Configure input
+        StreamSource streamSource = new StreamSource(new ByteArrayInputStream(metadata));
 
-    	// Do transform
+        // Configure output
+        StringWriter stringWriter = new StringWriter();
+        StreamResult streamResult = new StreamResult(stringWriter);
+
+        // Do transform
         Transformer transformer = template.newTransformer();
         transformer.transform(streamSource, streamResult);
 
         // Return result
         stringWriter.close();
         return stringWriter.toString();
-    }    
-    
+    }
+
     /**
-     * Returns the correct transform for the given schema version. 
-     * Will return a default transform if requested version is not found.
+     * Returns the correct transform for the given schema version. Will return a
+     * default transform if requested version is not found.
+     * 
      * @param schemaVersion The version of the schema to transform
      * @return The transform as a Templates object
      */
-    private Templates getTransform(String schemaVersion){
-    	Templates transform = templatesMap.get(schemaVersion);
-    	
-    	// get the default version (null key) if 
-    	if (transform == null){
-    		transform = templatesMap.get(null);
-    	}
-    	
-    	return transform;    	
+    private Templates getTransform(String schemaVersion) {
+        Templates transform = templatesMap.get(schemaVersion);
+
+        // get the default version (null key) if
+        if (transform == null) {
+            transform = templatesMap.get(null);
+        }
+
+        return transform;
     }
-    
+
     /**
      * Builds a DOMSource object from the input steam
+     * 
      * @param inputStream
      * @return The DOMSource object
      * @throws SAXException
      * @throws IOException
      * @throws ParserConfigurationException
      */
-    private DOMSource buildDOMSource(InputStream inputStream) throws SAXException, IOException, ParserConfigurationException {
+    private DOMSource buildDOMSource(InputStream inputStream)
+            throws SAXException, IOException, ParserConfigurationException {
         DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
         documentFactory.setNamespaceAware(true);
 
@@ -245,7 +204,7 @@ public class TransformerService extends Service {
         Document document = documentBuilder.parse(inputStream);
 
         return new DOMSource(document);
-        
+
     }
-    
+
 }

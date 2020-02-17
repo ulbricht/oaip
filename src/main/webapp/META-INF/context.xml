@@ -3,12 +3,7 @@
 
 	<Parameter name="mdssetcache.expiry.seconds" value="600" />
 	<Parameter name="stylesheet.identity" value="/xsl/identitytransform.xsl" />
-	<Parameter name="stylesheet.kernel2.0_to_oaidc" value="/xsl/kernel2.0_to_oaidc.xsl" />
-	<Parameter name="stylesheet.kernel2.1_to_oaidc" value="/xsl/kernel2.1_to_oaidc.xsl" />
-	<Parameter name="stylesheet.kernel2.2_to_oaidc" value="/xsl/kernel2.2_to_oaidc.xsl" />
-	<Parameter name="stylesheet.kernel2.3_to_oaidc" value="/xsl/kernel2.3_to_oaidc.xsl" />
-	<Parameter name="stylesheet.kernel3_to_oaidc" value="/xsl/kernel3_to_oaidc.xsl" />
-	<Parameter name="stylesheet.kernel4_to_oaidc" value="/xsl/kernel4_to_oaidc.xsl" />
+	<Parameter name="stylesheet.datacite_to_oaidc" value="/xsl/datacite_oai_dc.xsl" />
 	<Parameter name="stylesheet.DIFtoISO" value="/xsl/DIF-ISO-3.0.xsl" />	
 
 	<!-- file containing DB connection strings -->
@@ -31,7 +26,7 @@
 	<Parameter name="datacitemds.DataciteOAICatalog.maxListSize" value="50" />
 	<Parameter name="datacitemds.DataciteOAIRecordFactory.repositoryIdentifier" value="doidb.wdc-terra.org" />
 	<Parameter name="datacitemds.Identify.repositoryName" value="DOIDB Metadata Store" />
-	<Parameter name="datacitemds.Identify.adminEmail" value="ulbricht@gfz-potsdam.de" />
+	<Parameter name="datacitemds.Identify.adminEmail" value="datapub@gfz-potsdam.de" />
 	<Parameter name="datacitemds.Identify.earliestDatestamp" value="2011-01-01T00:00:00Z" />
 	<Parameter name="datacitemds.Identify.deletedRecord" value="persistent" />
 	<Parameter name="datacitemds.Identify.repositoryIdentifier" value="doidb.wdc-terra.org" />
@@ -42,7 +37,7 @@
 	<Parameter name="datacitemds.Crosswalks.dif" value="datacite.oai.provider.server.crosswalk.NasaDif"/>
 	<Parameter name="datacitemds.Crosswalks.iso19139" value="datacite.oai.provider.server.crosswalk.Iso19139"/>
 	<Parameter name="datacitemds.OAIHandler.styleSheet" value="xsl/oaitohtml.xsl" />	
-  <Parameter name="datacitemds.OAIHandler.baseURL" value="http://doidb.wdc-terra.org/oaip/oai" />
+    <Parameter name="datacitemds.OAIHandler.baseURL" value="http://doidb.wdc-terra.org/oaip/oai" />
 
 	<!-- OAICat properties -->
 	<!-- *************************************************************************** -->
