@@ -7,7 +7,11 @@
 <!-- Released on the 5th of June, 2008.  Last updated on the 1st of August, 2012 -->
 <!-- Version 3.1 -->
 <!-- ====================================================== -->
+<!--
 
+Damian ulbricht (ulbricht@gfz-potsdam.de) : made changes for GFZ (md-contact if DIF AUTHOR is missing), unique spatial coverage
+
+-->
 <!-- Trap for young players - name space definitions must match those served out of geoserver -->
 <xsl:stylesheet version="2.0" 
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -16,7 +20,9 @@
 	xmlns:gmd="http://www.isotc211.org/2005/gmd"
 	xmlns:gml="http://www.opengis.net/gml"
 	xmlns:dif="http://gcmd.gsfc.nasa.gov/Aboutus/xml/dif/"
-	xmlns:fn="http://www.w3.org/2005/02/xpath-functions">
+	xmlns:fn="http://www.w3.org/2005/02/xpath-functions"
+   xmlns:math="http://exslt.org/math"
+>
 
   <xsl:output method="xml" version="1.0" encoding="utf-8" indent="yes" media-type="text/plain" omit-xml-declaration="yes"/>
   <!--<xsl:strip-space elements="*"/> -->
@@ -56,6 +62,21 @@
         codeListValue="dataset">dataset</gmd:MD_ScopeCode>
     </gmd:hierarchyLevel>
 	
+ <gmd:contact>
+  <gmd:CI_ResponsibleParty>
+   <gmd:organisationName>
+    <gco:CharacterString>Deutsches GeoForschungsZentrum GFZ</gco:CharacterString>
+   </gmd:organisationName>
+   <gmd:role>
+     <gmd:CI_RoleCode
+       codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode"
+       codeListValue="pointOfContact">pointOfContact</gmd:CI_RoleCode>
+   </gmd:role>
+	</gmd:CI_ResponsibleParty>
+ </gmd:contact>
+
+
+
 		<xsl:for-each select="dif:Personnel">
 
 			<xsl:choose>
@@ -149,8 +170,8 @@
                       </gmd:CI_Contact>
                     </gmd:contactInfo>
 									
-									</xsl:if>
-											
+						</xsl:if>
+			
                   <gmd:role>
                     <gmd:CI_RoleCode
                       codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode"
@@ -162,9 +183,12 @@
 					</xsl:for-each>
 
 				</xsl:when>
+
 			</xsl:choose>			
 		
 		</xsl:for-each>
+
+
 		
 		<xsl:if test="dif:Originating_Metadata_Node!=''">
       <gmd:contact>
@@ -541,6 +565,14 @@
               </xsl:for-each>
 						
 						</xsl:if>
+
+               <xsl:variable name="authors" select="dif:Data_Set_Citation/dif:Dataset_Creator" />
+
+               <xsl:if test="count(//dif:Personnel) = 1">
+				         <xsl:call-template name="listauthors">					
+					         <xsl:with-param name="authors" select="concat(normalize-space($authors), ';')" /> 
+				         </xsl:call-template>
+					</xsl:if>
 						
 						<xsl:if test="dif:Data_Set_Citation/dif:Dataset_Creator!=''">
               <gmd:citedResponsibleParty>
@@ -582,11 +614,15 @@
               <gmd:citedResponsibleParty>
                 <xsl:for-each select="dif:Data_Set_Citation">
                   <gmd:CI_ResponsibleParty>
-                    <gmd:individualName>
+                    <gmd:organisationName>
                       <gco:CharacterString>
-                        <xsl:value-of select="./dif:Dataset_Publisher"/>
+                     <xsl:choose>
+                           <xsl:when test="../dif:Data_Center/dif:Data_Center_Name/dif:Short_Name='DE/GFZ/ISDC'">Deutsches GeoForschungsZentrum GFZ</xsl:when>
+                           <xsl:when test="../dif:Data_Center/dif:Data_Center_Name/dif:Short_Name='SDDB'">Deutsches GeoForschungsZentrum GFZ</xsl:when>
+                           <xsl:otherwise><xsl:value-of select="./dif:Dataset_Publisher"/></xsl:otherwise>
+                     </xsl:choose>
                       </gco:CharacterString>
-                    </gmd:individualName>
+                    </gmd:organisationName>
                     <gmd:role>
                       <gmd:CI_RoleCode
                         codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode"
@@ -1612,7 +1648,7 @@
 				<xsl:for-each select="dif:ISO_Topic_Category">
 					<gmd:topicCategory>
 						<gmd:MD_TopicCategoryCode>
-                            <xsl:value-of select="lower-case(.)"/>
+                            <xsl:value-of select="."/>
 						</gmd:MD_TopicCategoryCode>
 					</gmd:topicCategory>
 				</xsl:for-each>
@@ -1622,31 +1658,34 @@
 					
 						<xsl:choose>
               <xsl:when test="dif:Spatial_Coverage/dif:Westernmost_Longitude!='' and dif:Spatial_Coverage/dif:Easternmost_Longitude!='' and dif:Spatial_Coverage/dif:Southernmost_Latitude!='' and dif:Spatial_Coverage/dif:Northernmost_Latitude!=''">
+
+               <xsl:variable name="north" select="math:max(/dif:DIF/dif:Spatial_Coverage/dif:Northernmost_Latitude)"/>
+               <xsl:variable name="south" select="math:min(/dif:DIF/dif:Spatial_Coverage/dif:Southernmost_Latitude)"/>
+               <xsl:variable name="west" select="math:max(/dif:DIF/dif:Spatial_Coverage/dif:Westernmost_Longitude)"/>
+               <xsl:variable name="east" select="math:min(/dif:DIF/dif:Spatial_Coverage/dif:Easternmost_Longitude)"/>
                 <gmd:geographicElement>
-                  <xsl:for-each select="dif:Spatial_Coverage">
                     <gmd:EX_GeographicBoundingBox>
                       <gmd:westBoundLongitude>
                         <gco:Decimal>
-                          <xsl:value-of select="./dif:Westernmost_Longitude"/>
+                          <xsl:value-of select="$west"/>
                         </gco:Decimal>
                       </gmd:westBoundLongitude>
                       <gmd:eastBoundLongitude>
                         <gco:Decimal>
-                          <xsl:value-of select="./dif:Easternmost_Longitude"/>
+                          <xsl:value-of select="$east"/>
                         </gco:Decimal>
                       </gmd:eastBoundLongitude>
                       <gmd:southBoundLatitude>
                         <gco:Decimal>
-                          <xsl:value-of select="./dif:Southernmost_Latitude"/>
+                          <xsl:value-of select="$south"/>
                         </gco:Decimal>
                       </gmd:southBoundLatitude>
                       <gmd:northBoundLatitude>
                         <gco:Decimal>
-                          <xsl:value-of select="./dif:Northernmost_Latitude"/>
+                          <xsl:value-of select="$north"/>
                         </gco:Decimal>
                       </gmd:northBoundLatitude>																											
                     </gmd:EX_GeographicBoundingBox>
-                  </xsl:for-each>
                 </gmd:geographicElement>
               </xsl:when>
               <xsl:when test="dif:Spatial_Coverage/dif:Westernmost_Longitude='' and dif:Spatial_Coverage/dif:Easternmost_Longitude='' and dif:Spatial_Coverage/dif:Southernmost_Latitude='' and dif:Spatial_Coverage/dif:Northernmost_Latitude=''">
@@ -4000,4 +4039,27 @@
 	</xsl:template>
 	<!-- ====================================================== -->
   
+	<xsl:template name="listauthors">
+	    <xsl:param name="authors" /> 
+	    <xsl:variable name="author" select="normalize-space(substring-before($authors, ';'))" /> 
+	    <xsl:variable name="remaining" select="substring-after($authors, ';')" /> 
+	    <xsl:if test="$author!=''">
+<gmd:citedResponsibleParty>
+<gmd:CI_ResponsibleParty>
+<gmd:individualName>
+<gco:CharacterString><xsl:value-of select="$author"/></gco:CharacterString>
+</gmd:individualName>
+<gmd:role>
+<gmd:CI_RoleCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_RoleCode" codeListValue="author" >author</gmd:CI_RoleCode>
+</gmd:role>
+</gmd:CI_ResponsibleParty>
+</gmd:citedResponsibleParty> 
+	    </xsl:if>
+	    <xsl:if test="$remaining">
+		<xsl:call-template name="listauthors">
+		        <xsl:with-param name="authors" select="$remaining" /> 
+		</xsl:call-template>
+	    </xsl:if>
+	</xsl:template>
+
 </xsl:stylesheet>

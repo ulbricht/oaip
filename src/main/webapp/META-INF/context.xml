@@ -2,10 +2,9 @@
     <Parameter name="environmentLabel" value="PROD environment"/>
 
 	<Parameter name="mdssetcache.expiry.seconds" value="600" />
-	<Parameter name="stylesheet.kernel2.0_to_oaidc" value="/xsl/kernel2.0_to_oaidc.xsl" />
-	<Parameter name="stylesheet.kernel2.1_to_oaidc" value="/xsl/kernel2.1_to_oaidc.xsl" />
-	<Parameter name="stylesheet.kernel2.2_to_oaidc" value="/xsl/kernel2.2_to_oaidc.xsl" />
-	<Parameter name="stylesheet.DIFtoISO" value="/xsl/IGSNDescription.xsl" />
+	<Parameter name="stylesheet.identity" value="/xsl/identitytransform.xsl" />
+	<Parameter name="stylesheet.datacite_to_oaidc" value="/xsl/igsn_to_oaidc.xsl" />
+	<Parameter name="stylesheet.DIFtoISO" value="/xsl/IGSNDescription.xsl" />	
 
 	<!-- file containing DB connection strings -->
 	<Parameter name="db.properties" value="/WEB-INF/classes/database.properties" />
@@ -27,9 +26,9 @@
 	<Parameter name="datacitemds.DataciteOAICatalog.maxListSize" value="50" />
 	<Parameter name="datacitemds.DataciteOAIRecordFactory.repositoryIdentifier" value="gfzaa.igsn.org" />
 	<Parameter name="datacitemds.Identify.repositoryName" value="GFZ IGSN Allocator Store" />
-	<Parameter name="datacitemds.Identify.adminEmail" value="ulbricht@gfz-potsdam.de" />
+	<Parameter name="datacitemds.Identify.adminEmail" value="datapub@gfz-potsdam.de" />
 	<Parameter name="datacitemds.Identify.earliestDatestamp" value="2011-01-01T00:00:00Z" />
-	<Parameter name="datacitemds.Identify.deletedRecord" value="no" />
+	<Parameter name="datacitemds.Identify.deletedRecord" value="persistent" />
 	<Parameter name="datacitemds.Identify.repositoryIdentifier" value="gfzaa.igsn.org" />
 	<Parameter name="datacitemds.Identify.sampleIdentifier" value="oai:gfzaa.igsn.org:12425" />
 <!--	<Parameter name="datacitemds.Crosswalks.oai_datacite" value="datacite.oai.provider.server.crosswalk.OaiDatacite" />-->
@@ -39,7 +38,7 @@
 	<Parameter name="datacitemds.Crosswalks.igsngfz" value="datacite.oai.provider.server.crosswalk.NasaDif"/>	
 	<Parameter name="datacitemds.Crosswalks.igsndescription" value="datacite.oai.provider.server.crosswalk.Iso19139"/>
 	<Parameter name="datacitemds.OAIHandler.styleSheet" value="xsl/oaitohtml.xsl" />	
-  <Parameter name="datacitemds.OAIHandler.baseURL" value="http://doidb.wdc-terra.org/igsnoaip/oai" />
+  <Parameter name="datacitemds.OAIHandler.baseURL" value="http://doidb.wdc-terra.org/igsnaaoaip/oai" />
 
 	<!-- OAICat properties -->
 	<!-- *************************************************************************** -->

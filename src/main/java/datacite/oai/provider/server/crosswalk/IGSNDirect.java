@@ -16,10 +16,16 @@ import java.util.Properties;
 import org.oclc.oai.server.crosswalk.Crosswalk;
 import org.oclc.oai.server.verb.CannotDisseminateFormatException;
 import org.oclc.oai.server.verb.OAIInternalServerError;
+import org.apache.log4j.Logger;
+import datacite.oai.provider.service.ServiceException;
 
 import datacite.oai.provider.catalog.datacite.DatasetRecordBean;
+import datacite.oai.provider.service.TransformerService;
+import datacite.oai.provider.service.ServiceCollection;
 
 public class IGSNDirect extends Crosswalk {
+
+    private static final Logger logger = Logger.getLogger(IGSNDirect.class);
 
     public IGSNDirect(Properties properties) throws OAIInternalServerError {
         super("http://igsn.org/schema/nonexistant http://schema.igsn.org/meta/nonexistant/nonexistant.xsd");
@@ -28,7 +34,7 @@ public class IGSNDirect extends Crosswalk {
     public IGSNDirect(String schema, Properties properties) throws OAIInternalServerError {
         super("http://igsn.org/schema/nonexistant http://schema.igsn.org/meta/nonexistant/nonexistant.xsd");
     }
-        
+
     @Override
     public boolean isAvailableFor(Object nativeItem) {
         return nativeItem instanceof DatasetRecordBean;
@@ -36,9 +42,18 @@ public class IGSNDirect extends Crosswalk {
 
     @Override
     public String createMetadata(Object nativeItem) throws CannotDisseminateFormatException {
-        DatasetRecordBean dataset = (DatasetRecordBean)nativeItem;
-        String result = dataset.getMetadata();
+        try {
+            DatasetRecordBean dataset = (DatasetRecordBean) nativeItem;
 
-        return result;
+            ServiceCollection services = ServiceCollection.getInstance();
+            TransformerService transformerService = services.getTransformerService();
+
+            String result = transformerService.doTransformIdentity(dataset.getMetadata());
+
+            return result;
+        } catch (ServiceException e) {
+            logger.error("Error transforming dataset", e);
+            throw (CannotDisseminateFormatException) new CannotDisseminateFormatException("iso19139").initCause(e);
+        }
     }
 }

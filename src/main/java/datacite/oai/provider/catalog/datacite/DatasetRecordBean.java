@@ -13,35 +13,37 @@ package datacite.oai.provider.catalog.datacite;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 import datacite.oai.provider.Constants;
 
 /**
- * Encapsulates a single DataCite record in the MDS. 
+ * Encapsulates a single DataCite record in the MDS.
+ * 
  * @author PaluchM
  *
  */
-public class DatasetRecordBean implements Serializable{
+public class DatasetRecordBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     private String id;
-    private String metadata;
-    private String dif;
-	 private String iso;
+    private byte[] metadata;
+    private byte[] dif;
+    private byte[] iso;
+
     private Date updateDate;
-    
+
     private String symbol;
     private boolean refQuality;
     private boolean isActive;
-    
+
     private String schemaVersion;
 
     /**
      * Public constructor.
+     * 
      * @param id
      * @param metadata
      * @param updateDate
@@ -49,8 +51,9 @@ public class DatasetRecordBean implements Serializable{
      * @param isActive
      * @param symbol
      */
-    public DatasetRecordBean(String id,String metadata,String schemaVersion, Date updateDate,boolean refQuality,boolean isActive,String symbol){
-        this.id = id;        
+    public DatasetRecordBean(String id, byte[] metadata, String schemaVersion, Date updateDate, boolean refQuality,
+            boolean isActive, String symbol) {
+        this.id = id;
         this.updateDate = updateDate;
         this.refQuality = refQuality;
         this.isActive = isActive;
@@ -59,21 +62,23 @@ public class DatasetRecordBean implements Serializable{
 
         setMetadata(metadata);
 
-	dif=null;
-	iso=null;
+        dif = null;
+        iso = null;
     }
 
-    public void setDif(String dif) {
-        this.dif = dif.replaceAll("(<!--.*-->)","").replaceAll("(<\\?xml.*\\?>)","");
+    public void setDif(byte[] dif) {
+        this.dif = dif;
     }
-    public String getDif() {
+
+    public byte[] getDif() {
         return this.dif;
     }
 
-    public void setIso(String iso) {
-        this.iso = iso.replaceAll("(<!--.*-->)","").replaceAll("(<\\?xml.*\\?>)","");
+    public void setIso(byte[] iso) {
+        this.iso = iso;
     }
-    public String getIso() {
+
+    public byte[] getIso() {
         return this.iso;
     }
 
@@ -81,16 +86,15 @@ public class DatasetRecordBean implements Serializable{
         return this.id;
     }
 
-    public void setMetadata(String metadata){
-        //remove xml declaration, comment blocks, and everything before <resource>
-        this.metadata = metadata.replaceAll("(<!--.*-->)","").replaceAll("(<\\?xml.*\\?>)","");        
+    public void setMetadata(byte[] metadata) {
+        this.metadata = metadata;
     }
-    
-    public String getMetadata() {
+
+    public byte[] getMetadata() {
         return this.metadata;
     }
 
-    public Date getUpdateDate() { 
+    public Date getUpdateDate() {
         return this.updateDate;
     }
 
@@ -112,6 +116,7 @@ public class DatasetRecordBean implements Serializable{
 
     /**
      * Sets the DataCite schema version that this record adheres to
+     * 
      * @param schemaVersion
      */
     public void setSchemaVersion(String schemaVersion) {
@@ -120,6 +125,7 @@ public class DatasetRecordBean implements Serializable{
 
     /**
      * Returns the DataCite schema version that this record adheres to
+     * 
      * @return
      */
     public String getSchemaVersion() {
@@ -128,6 +134,7 @@ public class DatasetRecordBean implements Serializable{
 
     /**
      * Sets the active/deleted flag for this record.
+     * 
      * @param isActive
      */
     public void setActive(boolean isActive) {
@@ -136,35 +143,37 @@ public class DatasetRecordBean implements Serializable{
 
     /**
      * Returns the active/deleted flag for this record.
+     * 
      * @return
      */
     public boolean isActive() {
         return isActive;
-    }    
-    
+    }
+
     /**
-     * Creates a set listing for this record. 
+     * Creates a set listing for this record.
+     * 
      * @return an array containing all of the 'sets' that this record is a part of.
      */
-    public List<String> getSetList(){
+    public List<String> getSetList() {
         String symbol = getSymbol();
         LinkedList<String> sets = new LinkedList<String>();
-        
-        if (symbol != null && symbol.trim().length()>0){
+
+        if (symbol != null && symbol.trim().length() > 0) {
             sets.add(symbol);
-            if (isRefQuality()){
-                sets.add((symbol+Constants.Set.REF_QUALITY_SUFFIX).toUpperCase());
+            if (isRefQuality()) {
+                sets.add((symbol + Constants.Set.REF_QUALITY_SUFFIX).toUpperCase());
             }
         }
-        
-        while (symbol.contains(".")){
-            symbol = symbol.substring(0,symbol.lastIndexOf("."));
-            if (isRefQuality()){
-                sets.add((symbol+Constants.Set.REF_QUALITY_SUFFIX).toUpperCase());
+
+        while (symbol.contains(".")) {
+            symbol = symbol.substring(0, symbol.lastIndexOf("."));
+            if (isRefQuality()) {
+                sets.add((symbol + Constants.Set.REF_QUALITY_SUFFIX).toUpperCase());
             }
-            sets.add(0,symbol);
+            sets.add(0, symbol);
         }
-        
+
         return sets;
     }
 
