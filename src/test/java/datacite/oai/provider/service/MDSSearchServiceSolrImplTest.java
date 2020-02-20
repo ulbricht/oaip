@@ -3,13 +3,15 @@ package datacite.oai.provider.service;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.common.util.DateUtil;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,8 +27,11 @@ public class MDSSearchServiceSolrImplTest {
 
     @Before
     public void init() throws Exception {
-        from = DateUtil.parseDate(fromStr);
-        to = DateUtil.parseDate(toStr);
+    	
+    	SimpleDateFormat p = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.ROOT);
+    	p.setTimeZone(TimeZone.getTimeZone("GMT"));
+        from = p.parse(fromStr);
+        to = p.parse(toStr);
     }
 
     @Test
