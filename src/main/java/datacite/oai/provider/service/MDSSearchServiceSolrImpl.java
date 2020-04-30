@@ -211,6 +211,9 @@ public class MDSSearchServiceSolrImpl extends MDSSearchService {
             query.addFilterQuery("has_iso:true OR has_dif:true");
         }
 
+	query.set("qf", "title description subject sciencekeywordtree creator");
+	query.set("defType", "edismax");
+
         // query.setParam(CommonParams.QT, "/public/api");
 
         // logger.info(query);
